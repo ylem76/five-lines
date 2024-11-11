@@ -125,10 +125,13 @@ function update() {
 }
 
 function draw() {
-  let canvas = document.getElementById('GameCanvas') as HTMLCanvasElement;
-  let g = canvas.getContext('2d');
+  const createGraphics = () => {
+    let canvas = document.getElementById('GameCanvas') as HTMLCanvasElement;
+    let g = canvas.getContext('2d');
 
-  g.clearRect(0, 0, canvas.width, canvas.height);
+    g.clearRect(0, 0, canvas.width, canvas.height);
+    return g;
+  };
 
   const drawMap = (g: CanvasRenderingContext2D) => {
     for (let y = 0; y < map.length; y++) {
@@ -155,6 +158,7 @@ function draw() {
     g.fillRect(playerx * TILE_SIZE, playery * TILE_SIZE, TILE_SIZE, TILE_SIZE);
   };
 
+  const g = createGraphics();
   drawMap(g);
   drawPlayer(g);
 }
