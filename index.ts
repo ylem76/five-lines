@@ -111,14 +111,11 @@ function moveVertical(dy: number) {
     moveToTile(playerx, playery + dy);
   }
 }
-const handleInput = (input: Input) => {
-  input.handle();
-};
 
 const handleInputs = (inputs: Input[]) => {
   while (inputs.length > 0) {
     let current = inputs.pop();
-    handleInput(current);
+    current.handle();
   }
 };
 
