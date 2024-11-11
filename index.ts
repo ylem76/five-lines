@@ -92,7 +92,7 @@ function moveVertical(dy: number) {
   }
 }
 
-function update() {
+const handleInputs = (inputs: Input[]) => {
   while (inputs.length > 0) {
     let current = inputs.pop();
     if (current === Input.LEFT) moveHorizontal(-1);
@@ -100,7 +100,9 @@ function update() {
     else if (current === Input.UP) moveVertical(-1);
     else if (current === Input.DOWN) moveVertical(1);
   }
+};
 
+const updateMap = (map: Tile[][]) => {
   for (let y = map.length - 1; y >= 0; y--) {
     for (let x = 0; x < map[y].length; x++) {
       if (
@@ -122,42 +124,47 @@ function update() {
       }
     }
   }
+};
+
+function update() {
+  handleInputs(inputs);
+  updateMap(map);
 }
 
-function draw() {
-  const createGraphics = () => {
-    let canvas = document.getElementById('GameCanvas') as HTMLCanvasElement;
-    let g = canvas.getContext('2d');
+const createGraphics = () => {
+  let canvas = document.getElementById('GameCanvas') as HTMLCanvasElement;
+  let g = canvas.getContext('2d');
 
-    g.clearRect(0, 0, canvas.width, canvas.height);
-    return g;
-  };
+  g.clearRect(0, 0, canvas.width, canvas.height);
+  return g;
+};
 
-  const drawMap = (g: CanvasRenderingContext2D) => {
-    for (let y = 0; y < map.length; y++) {
-      for (let x = 0; x < map[y].length; x++) {
-        if (map[y][x] === Tile.FLUX) g.fillStyle = '#ccffcc';
-        else if (map[y][x] === Tile.UNBREAKABLE) g.fillStyle = '#999999';
-        else if (map[y][x] === Tile.STONE || map[y][x] === Tile.FALLING_STONE)
-          g.fillStyle = '#0000cc';
-        else if (map[y][x] === Tile.BOX || map[y][x] === Tile.FALLING_BOX)
-          g.fillStyle = '#8b4513';
-        else if (map[y][x] === Tile.KEY1 || map[y][x] === Tile.LOCK1)
-          g.fillStyle = '#ffcc00';
-        else if (map[y][x] === Tile.KEY2 || map[y][x] === Tile.LOCK2)
-          g.fillStyle = '#00ccff';
+const drawMap = (g: CanvasRenderingContext2D) => {
+  for (let y = 0; y < map.length; y++) {
+    for (let x = 0; x < map[y].length; x++) {
+      if (map[y][x] === Tile.FLUX) g.fillStyle = '#ccffcc';
+      else if (map[y][x] === Tile.UNBREAKABLE) g.fillStyle = '#999999';
+      else if (map[y][x] === Tile.STONE || map[y][x] === Tile.FALLING_STONE)
+        g.fillStyle = '#0000cc';
+      else if (map[y][x] === Tile.BOX || map[y][x] === Tile.FALLING_BOX)
+        g.fillStyle = '#8b4513';
+      else if (map[y][x] === Tile.KEY1 || map[y][x] === Tile.LOCK1)
+        g.fillStyle = '#ffcc00';
+      else if (map[y][x] === Tile.KEY2 || map[y][x] === Tile.LOCK2)
+        g.fillStyle = '#00ccff';
 
-        if (map[y][x] !== Tile.AIR && map[y][x] !== Tile.PLAYER)
-          g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-      }
+      if (map[y][x] !== Tile.AIR && map[y][x] !== Tile.PLAYER)
+        g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
-  };
+  }
+};
 
-  const drawPlayer = (g: CanvasRenderingContext2D) => {
-    g.fillStyle = '#ff0000';
-    g.fillRect(playerx * TILE_SIZE, playery * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-  };
+const drawPlayer = (g: CanvasRenderingContext2D) => {
+  g.fillStyle = '#ff0000';
+  g.fillRect(playerx * TILE_SIZE, playery * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+};
 
+function draw() {
   const g = createGraphics();
   drawMap(g);
   drawPlayer(g);
